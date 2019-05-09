@@ -3,17 +3,32 @@ package com.mazlinhigbee.jeopardyapp.Models;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 /**
  * com.mazlinhigbee.jeopardyapp.Models
  * Created by: mhigbee
  * Date: 5/8/19 Time: 12:26 PM
  */
+@Entity(tableName = "players")
 public class Player {
 
     private static ArrayList<Player> allPlayers;
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @NonNull
+    @ColumnInfo(name = "name")
     private String name;
+
+    @NonNull
+    @ColumnInfo(name = "is_playing")
     private boolean isPlaying;
     //ScoreHistory history
 
@@ -45,7 +60,15 @@ public class Player {
         return allPlayers;
     }
 
-    public static void setAllPlayers(ArrayList<Player> allPlayers) {
-        Player.allPlayers = allPlayers;
+    public static void setAllPlayers(List<Player> allPlayers) {
+        Player.allPlayers = new ArrayList<>(allPlayers);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
