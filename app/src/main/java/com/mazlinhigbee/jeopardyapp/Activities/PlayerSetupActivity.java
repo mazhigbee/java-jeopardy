@@ -1,20 +1,18 @@
 package com.mazlinhigbee.jeopardyapp.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mazlinhigbee.jeopardyapp.API.JServiceRestInterface;
-import com.mazlinhigbee.jeopardyapp.API.RetroFitFactory;
 import com.mazlinhigbee.jeopardyapp.JeopardyApp;
 import com.mazlinhigbee.jeopardyapp.Models.Category;
-import com.mazlinhigbee.jeopardyapp.Models.Clue;
+import com.mazlinhigbee.jeopardyapp.Models.GameState;
 import com.mazlinhigbee.jeopardyapp.Models.Player;
 import com.mazlinhigbee.jeopardyapp.Models.ViewModels.PlayerViewModel;
 import com.mazlinhigbee.jeopardyapp.R;
@@ -22,7 +20,7 @@ import com.mazlinhigbee.jeopardyapp.Views.Adapters.PlayerAdapter;
 import com.mazlinhigbee.jeopardyapp.Views.Listeners.PickerViewContract;
 import com.mazlinhigbee.jeopardyapp.Views.UserPickerDialog;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -32,9 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * com.mazlinhigbee.jeopardyapp.Activities
@@ -45,6 +40,8 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
 
     private Context context;
     private PlayerViewModel playerViewModel;
+    private ArrayList<Category> gameChosenCategories;
+    private ArrayList<Player> chosenPlayers;
 
 
     @BindView(R.id.player_setup_add)
@@ -72,7 +69,10 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
         super.onCreate(savedInstace);
         setContentView(R.layout.player_setup_activity);
         ButterKnife.bind(this);
+
         context = getApplicationContext();
+        gameChosenCategories = new ArrayList<>();
+        chosenPlayers = new ArrayList<>();
 
         btnAdd.setImageResource(R.drawable.ic_person);
         btnAdd.setOnClickListener(v -> {
@@ -92,10 +92,9 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
 
         playerViewModel = ViewModelProviders.of(this).get(PlayerViewModel.class);
 
-        playerViewModel.getAllPlayers().observe(this, words -> {
-            Player.setAllPlayers(words);
+        playerViewModel.getAllPlayers().observe(this, players -> {
+            Player.setAllPlayers(players);
             recyclerView.setAdapter(new PlayerAdapter(this, Player.getAllPlayers()));
-
         });
 
         userPickerDialog.setViewContract(this);
@@ -140,7 +139,7 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
     }
 
     private void pickCategory() {
-        JeopardyApp.gameChosenCategories.clear();
+        gameChosenCategories.clear();
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.select_dialog_multichoice);
@@ -152,11 +151,14 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Choose Categories")
                 .setAdapter(arrayAdapter, null)
-                .setPositiveButton("Done",
-                        (dialog1, which) -> {
-                            dialog1.dismiss();
-                            //todo start game...
-                        })
+                .setPositiveButton("Done", (dialog1, which) -> {
+                    playerViewModel.getAllActivePlayers().observe(this, players -> {
+                        chosenPlayers = new ArrayList<>(players);
+                    });
+                    JeopardyApp.curGameState = new GameState(gameChosenCategories, chosenPlayers);
+                    startActivity(new Intent(this, GameActivity.class));
+                    dialog1.dismiss();
+                })
                 .setNegativeButton(getResources().getString(android.R.string.cancel), null)
                 .create();
 
@@ -165,11 +167,11 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
         dialog.getListView().setOnItemClickListener((parent, view, position, id) -> {
             CheckedTextView textView = (CheckedTextView) view;
             if (textView.isChecked()) {
-                JeopardyApp.gameChosenCategories.add(
+                gameChosenCategories.add(
                         JeopardyApp.getCategoryFromStringName(arrayAdapter.getItem(position)
                         ));
             } else {
-                JeopardyApp.gameChosenCategories.add(
+                gameChosenCategories.add(
                         JeopardyApp.getCategoryFromStringName(arrayAdapter.getItem(position)
                         ));
             }
@@ -177,25 +179,4 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
         dialog.show();
     }
 
-    private void getCluesForCategory(Category categoryId) {
-        JServiceRestInterface comm = RetroFitFactory.getRetroFit().create(JServiceRestInterface.class);
-        ;
-
-        Call<List<Clue>> getClues = comm.getCluesForCategory(categoryId.getId());
-        getClues.enqueue(new Callback<List<Clue>>() {
-            @Override
-            public void onResponse(Call<List<Clue>> call, Response<List<Clue>> response) {
-                // recyclerView.setAdapter(new ClueAdapter(getApplicationContext(), response.body()));
-                //go ahead and start playing?
-                JeopardyApp.clueMap.put(categoryId.getId(), response.body());
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Clue>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error retreiving clues.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
 }

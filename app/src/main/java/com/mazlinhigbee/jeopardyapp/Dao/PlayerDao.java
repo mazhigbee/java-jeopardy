@@ -25,4 +25,7 @@ public interface PlayerDao {
 
     @Query("SELECT * from players ORDER BY name ASC")
     LiveData<List<Player>> getAllPlayers();
+
+    @Query("select * from players where is_playing = :playing")
+    LiveData<List<Player>> getAllActivePlayers(boolean playing);
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.mazlinhigbee.jeopardyapp.Models.Category;
 import com.mazlinhigbee.jeopardyapp.Models.Clue;
+import com.mazlinhigbee.jeopardyapp.Models.GameState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class JeopardyApp {
     public static Category CURRENT_CATEGORY = new Category(11524,"transformed food",5);
     private static List<Category> categories;
     public static HashMap<Integer,List<Clue>> clueMap = new HashMap<>();
-    public static ArrayList<Category> gameChosenCategories = new ArrayList<>();
+    public static GameState curGameState;
     public static MainActivity mainActivity;
 
 

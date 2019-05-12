@@ -16,18 +16,25 @@ import androidx.lifecycle.LiveData;
  * Date: 5/9/19 Time: 5:42 PM
  */
 public class PlayerViewModel extends AndroidViewModel {
+    private PlayerRepo mRepository;
 
-        private PlayerRepo mRepository;
+    private LiveData<List<Player>> mAllWords;
 
-        private LiveData<List<Player>> mAllWords;
+    public PlayerViewModel(Application application) {
+        super(application);
+        mRepository = new PlayerRepo(application);
+        mAllWords = mRepository.getAllPlayers();
+    }
 
-        public PlayerViewModel (Application application) {
-            super(application);
-            mRepository = new PlayerRepo(application);
-            mAllWords = mRepository.getAllPlayers();
-        }
+    public LiveData<List<Player>> getAllPlayers() {
+        return mAllWords;
+    }
 
-        public LiveData<List<Player>> getAllPlayers() { return mAllWords; }
+    public LiveData<List<Player>> getAllActivePlayers() {
+        return mRepository.getAllActivePlayers();
+    }
 
-        public void insert(Player word) { mRepository.insert(word); }
+    public void insert(Player word) {
+        mRepository.insert(word);
+    }
 }

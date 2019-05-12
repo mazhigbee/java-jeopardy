@@ -28,6 +28,10 @@ public class PlayerRepo {
         return allPlayers;
     }
 
+    public LiveData<List<Player>> getAllActivePlayers() {
+        return playerDao.getAllActivePlayers(true);
+    }
+
     public void insert(Player player) {
         new insertAsyncTask(playerDao).execute(player);
     }

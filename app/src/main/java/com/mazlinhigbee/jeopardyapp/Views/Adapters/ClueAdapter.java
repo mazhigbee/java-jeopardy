@@ -51,7 +51,7 @@ public class ClueAdapter extends RecyclerView.Adapter<ClueAdapter.ClueAdapterVie
         holder.clue.setText(curClue.getQuestion());
         holder.cost.setText(String.valueOf(curClue.getValue()));
         holder.rightArrow.setOnClickListener(v -> {
-            AlertDialog.Builder modal = new AlertDialog.Builder(JeopardyApp.mainActivity,0);
+            AlertDialog.Builder modal = new AlertDialog.Builder(context,0);
             modal.setTitle("What is...?");
             modal.setMessage(curClue.getAnswer());
             modal.setPositiveButton("OK",(dialog, which) -> dialog.dismiss());
