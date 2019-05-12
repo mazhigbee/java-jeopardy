@@ -15,8 +15,6 @@ import androidx.lifecycle.LiveData;
  * Date: 5/9/19 Time: 5:38 PM
  */
 public class PlayerRepo {
-
-
     private PlayerDao playerDao;
     private LiveData<List<Player>> allPlayers;
 
@@ -29,7 +27,6 @@ public class PlayerRepo {
     public LiveData<List<Player>> getAllPlayers() {
         return allPlayers;
     }
-
 
     public void insert(Player player) {
         new insertAsyncTask(playerDao).execute(player);

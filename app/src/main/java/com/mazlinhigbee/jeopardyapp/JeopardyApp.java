@@ -3,8 +3,10 @@ package com.mazlinhigbee.jeopardyapp;
 import android.app.Activity;
 
 import com.mazlinhigbee.jeopardyapp.Models.Category;
+import com.mazlinhigbee.jeopardyapp.Models.Clue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -15,6 +17,8 @@ import java.util.List;
 public class JeopardyApp {
     public static Category CURRENT_CATEGORY = new Category(11524,"transformed food",5);
     private static List<Category> categories;
+    public static HashMap<Integer,List<Clue>> clueMap = new HashMap<>();
+    public static ArrayList<Category> gameChosenCategories = new ArrayList<>();
     public static MainActivity mainActivity;
 
 
@@ -27,5 +31,21 @@ public class JeopardyApp {
 
     public static void setCategories(List<Category> categories) {
         JeopardyApp.categories = categories;
+    }
+
+    /**
+     * Return a given category via its name..
+     * @param catName
+     * @return
+     */
+    public static Category getCategoryFromStringName(String catName) {
+        if(categories != null) {
+            for(Category c : categories) {
+                if(c.getTitle().toLowerCase().equals(catName.toLowerCase())) {
+                    return c;
+                }
+            }
+        }
+        return null;
     }
 }

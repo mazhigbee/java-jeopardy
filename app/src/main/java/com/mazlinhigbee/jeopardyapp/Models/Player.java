@@ -1,7 +1,5 @@
 package com.mazlinhigbee.jeopardyapp.Models;
 
-import android.widget.ArrayAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 

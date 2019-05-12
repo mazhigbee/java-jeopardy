@@ -8,16 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mazlinhigbee.jeopardyapp.Models.Player;
+import com.mazlinhigbee.jeopardyapp.Models.ViewModels.PlayerViewModel;
 import com.mazlinhigbee.jeopardyapp.R;
 import com.mazlinhigbee.jeopardyapp.Views.Adapters.PlayerAdapter;
 import com.mazlinhigbee.jeopardyapp.Views.Listeners.PickerViewContract;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -42,15 +40,29 @@ public class UserPickerDialog extends ConstraintLayout {
     EditText edtUser;
 
     private PickerViewContract viewContract;
+    private PlayerViewModel playerViewModel;
+    private LifecycleOwner lifecycleOwner;
+
 
     public void setViewContract(PickerViewContract viewContract) {
         this.viewContract = viewContract;
     }
 
+    public void setViewModel(PlayerViewModel viewModel, LifecycleOwner owner) {
+        this.playerViewModel = viewModel;
+        this.lifecycleOwner  = owner;
+        playerViewModel.getAllPlayers().observe(lifecycleOwner, words -> {
+            Player.setAllPlayers(words);
+            recyclerView.setAdapter(new PlayerAdapter(getContext(), Player.getAllPlayers()));
+        });
+    }
+
+
     public UserPickerDialog(Context context, AttributeSet set) {
-        super(context,set);
+        super(context, set);
         init();
     }
+
     public UserPickerDialog(Context context) {
         super(context);
         init();
@@ -59,16 +71,14 @@ public class UserPickerDialog extends ConstraintLayout {
     private void init() {
         View view = inflate(getContext(), R.layout.user_picker, this);
         ButterKnife.bind(view);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         this.setVisibility(INVISIBLE);
-        recyclerView.setAdapter(new PlayerAdapter(getContext(),Player.getAllPlayers()));
-        //todo fetch from room
-
 
         btnAddPlayer.setOnClickListener(v -> {
-            if(edtUser.getText().length() > 0) {
-                Player.getAllPlayers().add(new Player(edtUser.getText().toString(),true));
-                recyclerView.setAdapter(new PlayerAdapter(getContext(),Player.getAllPlayers()));
+            if (edtUser.getText().length() > 0) {
+                Player.getAllPlayers().add(new Player(edtUser.getText().toString(), true));
+                recyclerView.setAdapter(new PlayerAdapter(getContext(), Player.getAllPlayers()));
 
             }
         });

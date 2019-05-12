@@ -30,17 +30,20 @@ public class Clue {
 
     Category category;
 
-    public Clue(Integer id, String answer, String question, Integer value, String airdate, String createdAt, String updatedAt, Integer categoryId, Integer gameId, Category category) {
-        this.id = id;
-        this.answer = answer;
-        this.question = question;
-        this.value = value;
-        this.airdate = airdate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.categoryId = categoryId;
-        this.gameId = gameId;
-        this.category = category;
+//    public Clue(Integer id, String answer, String question, Integer value, String airdate, String createdAt, String updatedAt, Integer categoryId, Integer gameId, Category category) {
+//        this.id = id;
+//        this.answer = answer;
+//        this.question = question;
+//        this.value = value;
+//        this.airdate = airdate;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
+//        this.categoryId = categoryId;
+//        this.gameId = gameId;
+//        this.category = category;
+//    }
+    public Clue() {
+        //empty constructor
     }
 
     public Integer getId() {
