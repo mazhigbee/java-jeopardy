@@ -55,7 +55,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreAdapter
             for (ClueResult c : gameState.getResults().get(curPlayer)) {
                 if (c.isAnwseredCorrectly() && c.getClue().getValue() != null) {
                     totalWinning += c.getClue().getValue();
-                } else {
+                } else if(c.getClue().getValue() != null) {
                     totalWinning -= c.getClue().getValue();
                 }
             }

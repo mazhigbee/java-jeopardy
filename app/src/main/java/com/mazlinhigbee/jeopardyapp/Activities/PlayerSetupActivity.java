@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mazlinhigbee.jeopardyapp.JeopardyApp;
@@ -59,7 +60,18 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
 
     @Override
     public void onBackPressed() {
-        userPickerDialog.setVisibility(View.GONE);
+        if (userPickerDialog != null && userPickerDialog.getVisibility() == View.VISIBLE) {
+            hidePlayerPicker();
+        } else if (userPickerDialog != null && ((userPickerDialog.getVisibility() == View.GONE)
+                || (userPickerDialog.getVisibility()) == View.INVISIBLE)) {
+            super.onBackPressed();
+        }
+    }
+
+    private void hidePlayerPicker(){
+        if(userPickerDialog != null)
+            userPickerDialog.setVisibility(View.GONE);
+
         btnAdd.setVisibility(View.VISIBLE);
         btnStart.setVisibility(View.VISIBLE);
     }
@@ -81,11 +93,7 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
             btnStart.setVisibility(View.GONE);
         });
 
-        btnStart.setOnClickListener(v -> {
-            //pick categories
-            //start game
-            pickCategory();
-        });
+        btnStart.setOnClickListener(v -> canWeStart());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new PlayerAdapter(this, Player.getAllPlayers()));
@@ -100,32 +108,19 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
         userPickerDialog.setViewContract(this);
         userPickerDialog.setViewModel(playerViewModel, this);
 
-
-//        new RoomDatabase.Callback() {
-//            @Override
-//            public void onOpen(@NonNull SupportSQLiteDatabase db) {
-//                super.onOpen(db);
-//                new PopulateDbAsync(PlayerRoomDatabase.getDatabase(context)).execute();
-//            }
-//        };
-
     }
-//
-//
-//    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-//
-//        private final PlayerDao mDao;
-//
-//        PopulateDbAsync(PlayerRoomDatabase db) {
-//            mDao = db.playerDao();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(final Void... params) {
-//
-//            return null;
-//        }
-//    }
+
+    private void canWeStart() {
+        playerViewModel.getAllActivePlayers().observe(this, players -> {
+            if (players == null || players.size() == 0) {
+                Toast.makeText(this, "Please add a player first.", Toast.LENGTH_SHORT).show();
+            } else {
+                chosenPlayers = new ArrayList<>(players);
+                pickCategory();
+            }
+        });
+    }
+
 
     @Override
     public void donePicking() {
@@ -134,7 +129,7 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
                 playerViewModel.insert(p);
             }
             recyclerView.getAdapter().notifyDataSetChanged();
-            onBackPressed();
+            hidePlayerPicker();
         }
     }
 
@@ -152,12 +147,9 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
                 .setTitle("Choose Categories")
                 .setAdapter(arrayAdapter, null)
                 .setPositiveButton("Done", (dialog1, which) -> {
-                    playerViewModel.getAllActivePlayers().observe(this, players -> {
-                        chosenPlayers = new ArrayList<>(players);
                         JeopardyApp.curGameState = new GameState(gameChosenCategories, chosenPlayers);
                         startActivity(new Intent(this, GameActivity.class));
                         dialog1.dismiss();
-                    });
                 })
                 .setNegativeButton(getResources().getString(android.R.string.cancel), null)
                 .create();
@@ -171,7 +163,7 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
                         JeopardyApp.getCategoryFromStringName(arrayAdapter.getItem(position)
                         ));
             } else {
-                gameChosenCategories.add(
+                gameChosenCategories.remove(
                         JeopardyApp.getCategoryFromStringName(arrayAdapter.getItem(position)
                         ));
             }

@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:titleTextColor="@color/md_white_1000"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
         </androidx.appcompat.widget.Toolbar>
@@ -42,16 +43,6 @@
             android:layout_centerInParent="true"
             android:textColor="@color/md_black_1000"
             android:background="@drawable/rounded_white"/>
-
-        <!--<androidx.recyclerview.widget.RecyclerView-->
-            <!--android:id="@+id/activity_main_recycler"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:clipChildren="false"-->
-            <!--android:nestedScrollingEnabled="false"-->
-            <!--android:layout_below="@id/toolbar"-->
-             <!--/>-->
-
 
     </RelativeLayout>
 

@@ -71,7 +71,7 @@ public class GameOverActivity extends AppCompatActivity {
                     if (c.isAnwseredCorrectly() && c.getClue().getValue() != null) {
                         totalWinning += c.getClue().getValue();
                         questionsRight++;
-                    } else {
+                    } else if(c.getClue().getValue() != null){
                         totalWinning -= c.getClue().getValue();
                         questionsWrong++;
                     }

@@ -81,9 +81,10 @@ public class GameActivity extends AppCompatActivity implements ClueResponseListe
         for (int i = 0; i < gameState.getCategories().size(); i++) {
             final Category cur = gameState.getCategories().get(i);
 
+            tabLayout.addTab(tabLayout.newTab().setText(cur.getTitle()).setTag(cur.getId()));//setup tablayout
+
             getCluesForCategory(cur); //network call to get clues
 
-            tabLayout.addTab(tabLayout.newTab().setText(cur.getTitle()).setTag(cur.getId()));//setup tablayout
         }
 
 
@@ -175,8 +176,7 @@ public class GameActivity extends AppCompatActivity implements ClueResponseListe
 
                     if (gameState.getResults().get(p) == null) {
                         ArrayList<ClueResult> results = new ArrayList<>();
-                        results.add(clueResult);
-                        gameState.getResults().put(p, results);
+                        gameState.getResults().put(p,results);
                     }
                     gameState.getResults().get(p).add(clueResult);
                     gameState.getCategoryClueMap().get(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getTag()).remove(clue);

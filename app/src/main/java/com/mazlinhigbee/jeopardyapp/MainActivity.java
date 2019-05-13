@@ -1,11 +1,9 @@
 package com.mazlinhigbee.jeopardyapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +19,6 @@ import com.mazlinhigbee.jeopardyapp.Models.Clue;
 import java.util.List;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -45,8 +42,6 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.activity_main_start)
     TextView btnStart;
 
-//    @BindView(R.id.activity_main_recycler)
-//    RecyclerView recyclerView;
 
     TextView drawerText;
     TextView drawerTextSub;
@@ -74,24 +69,17 @@ public class MainActivity extends AppCompatActivity
 
         comm = RetroFitFactory.getRetroFit().create(JServiceRestInterface.class);
 
-
         loadCategories();
         getCluesForCategory(JeopardyApp.CURRENT_CATEGORY);
 
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1);
         layoutManager.requestLayout();
-        //recyclerView.setLayoutManager(layoutManager);
-        // recyclerView.setAdapter(null);
+
 
         drawerText = navView.getHeaderView(0).findViewById(R.id.nav_header_main_name);
-        drawerTextSub = navView.getHeaderView(0).findViewById(R.id.nav_header_main_desc);
-
-        drawerText.setText("Chosen Category");
-        drawerTextSub.setText(JeopardyApp.CURRENT_CATEGORY.getTitle());
 
         btnStart.setOnClickListener(v -> startActivity(new Intent(this, PlayerSetupActivity.class)));
-
 
         JeopardyApp.mainActivity = this;
     }
@@ -114,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_category) {
-            startActivity(new Intent(this,HistoryActivity.class));
+            startActivity(new Intent(this, HistoryActivity.class));
 
         }
 
@@ -159,44 +147,5 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-    }
-
-    private void showDialogFragment() {
-
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(this);
-        builderSingle.setTitle("Select a Category");
-
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice);
-        for (Category c : JeopardyApp.getCategories()) {
-            arrayAdapter.add(c.getTitle());
-        }
-
-
-        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String strName = arrayAdapter.getItem(which);
-                AlertDialog.Builder builderInner = new AlertDialog.Builder(arrayAdapter.getContext());
-                builderInner.setMessage(strName);
-                builderInner.setTitle("Your Selected Item is");
-                builderInner.setPositiveButton("Ok", (dialog1, pos) -> {
-                    JeopardyApp.CURRENT_CATEGORY = JeopardyApp.getCategories().get(which);
-
-                    drawerText.setText("Chosen Category");
-                    drawerTextSub.setText(JeopardyApp.CURRENT_CATEGORY.getTitle());
-
-                    getCluesForCategory(JeopardyApp.CURRENT_CATEGORY);
-                });
-                builderInner.show();
-            }
-        });
-        builderSingle.show();
     }
 }
