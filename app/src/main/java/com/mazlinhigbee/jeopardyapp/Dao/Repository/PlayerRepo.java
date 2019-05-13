@@ -34,6 +34,10 @@ public class PlayerRepo {
         return playerDao.getAllActivePlayers(true);
     }
 
+    public LiveData<Player> getPlayerViaId(int id) {
+        return playerDao.getPlayerViaId(id);
+    }
+
     public void insert(Player player) {
         new insertAsyncTask(playerDao).execute(player);
     }

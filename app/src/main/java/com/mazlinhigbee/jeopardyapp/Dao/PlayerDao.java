@@ -28,4 +28,7 @@ public interface PlayerDao {
 
     @Query("select * from players where is_playing = :playing")
     LiveData<List<Player>> getAllActivePlayers(boolean playing);
+
+    @Query("select *  from players where id = :id")
+    LiveData<Player> getPlayerViaId(int id);
 }

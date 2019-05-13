@@ -34,6 +34,10 @@ public class PlayerViewModel extends AndroidViewModel {
         return mRepository.getAllActivePlayers();
     }
 
+    public LiveData<Player> getPlayerViaId(int id) {
+        return mRepository.getPlayerViaId(id);
+    }
+
     public void insert(Player word) {
         mRepository.insert(word);
     }

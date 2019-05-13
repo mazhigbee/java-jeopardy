@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.mazlinhigbee.jeopardyapp.API.JServiceRestInterface;
 import com.mazlinhigbee.jeopardyapp.API.RetroFitFactory;
+import com.mazlinhigbee.jeopardyapp.Activities.HistoryActivity;
 import com.mazlinhigbee.jeopardyapp.Activities.PlayerSetupActivity;
 import com.mazlinhigbee.jeopardyapp.Models.Category;
 import com.mazlinhigbee.jeopardyapp.Models.Clue;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_category) {
-            startActivity(new Intent());
+            startActivity(new Intent(this,HistoryActivity.class));
 
         }
 

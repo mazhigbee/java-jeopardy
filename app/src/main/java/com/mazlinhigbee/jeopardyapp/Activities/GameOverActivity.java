@@ -48,7 +48,9 @@ public class GameOverActivity extends AppCompatActivity {
         initTopScore();
 
         btnDone.setOnClickListener(v -> {
+            JeopardyApp.curGameState = null;
             startActivity(new Intent(this,MainActivity.class));
+
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
