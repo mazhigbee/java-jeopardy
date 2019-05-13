@@ -154,10 +154,10 @@ public class PlayerSetupActivity extends AppCompatActivity implements PickerView
                 .setPositiveButton("Done", (dialog1, which) -> {
                     playerViewModel.getAllActivePlayers().observe(this, players -> {
                         chosenPlayers = new ArrayList<>(players);
+                        JeopardyApp.curGameState = new GameState(gameChosenCategories, chosenPlayers);
+                        startActivity(new Intent(this, GameActivity.class));
+                        dialog1.dismiss();
                     });
-                    JeopardyApp.curGameState = new GameState(gameChosenCategories, chosenPlayers);
-                    startActivity(new Intent(this, GameActivity.class));
-                    dialog1.dismiss();
                 })
                 .setNegativeButton(getResources().getString(android.R.string.cancel), null)
                 .create();

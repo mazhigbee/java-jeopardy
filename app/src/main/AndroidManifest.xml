@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".Activities.PlayerSetupActivity" />
         <activity android:name=".Activities.GameActivity" />
+        <activity android:name=".Activities.GameOverActivity" />
     </application>
 
 </manifest>

@@ -30,6 +30,8 @@ public class Clue {
 
     Category category;
 
+    private boolean isAnswered;
+
 //    public Clue(Integer id, String answer, String question, Integer value, String airdate, String createdAt, String updatedAt, Integer categoryId, Integer gameId, Category category) {
 //        this.id = id;
 //        this.answer = answer;
@@ -84,6 +86,14 @@ public class Clue {
 
     public Category getCategory() {
         return category;
+    }
+
+    public boolean isAnswered() {
+        return isAnswered;
+    }
+
+    public void setAnswered(boolean answered) {
+        isAnswered = answered;
     }
 }
 //{

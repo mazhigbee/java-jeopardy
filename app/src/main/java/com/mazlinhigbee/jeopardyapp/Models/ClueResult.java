@@ -16,4 +16,16 @@ public class ClueResult {
         this.resultPlayer = resultPlayer;
         this.clue = clue;
     }
+
+    public boolean isAnwseredCorrectly() {
+        return anwseredCorrectly;
+    }
+
+    public Player getResultPlayer() {
+        return resultPlayer;
+    }
+
+    public Clue getClue() {
+        return clue;
+    }
 }

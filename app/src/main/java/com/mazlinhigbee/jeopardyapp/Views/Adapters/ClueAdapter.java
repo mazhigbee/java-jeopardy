@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.mazlinhigbee.jeopardyapp.JeopardyApp;
 import com.mazlinhigbee.jeopardyapp.Models.Clue;
+import com.mazlinhigbee.jeopardyapp.Models.GameState;
 import com.mazlinhigbee.jeopardyapp.R;
+import com.mazlinhigbee.jeopardyapp.Views.Listeners.ClueResponseListener;
 
 import java.util.List;
 
@@ -29,10 +31,12 @@ public class ClueAdapter extends RecyclerView.Adapter<ClueAdapter.ClueAdapterVie
 
     private Context context;
     private List<Clue> clues;
+    private ClueResponseListener responseListener;
 
-    public ClueAdapter(Context context, List<Clue> clues) {
+    public ClueAdapter(Context context, List<Clue> clues, ClueResponseListener responseListener) {
         this.context = context;
         this.clues = clues;
+        this.responseListener = responseListener;
     }
 
     @NonNull
@@ -50,13 +54,24 @@ public class ClueAdapter extends RecyclerView.Adapter<ClueAdapter.ClueAdapterVie
 
         holder.clue.setText(curClue.getQuestion());
         holder.cost.setText(String.valueOf(curClue.getValue()));
-        holder.rightArrow.setOnClickListener(v -> {
-            AlertDialog.Builder modal = new AlertDialog.Builder(context,0);
-            modal.setTitle("What is...?");
-            modal.setMessage(curClue.getAnswer());
-            modal.setPositiveButton("OK",(dialog, which) -> dialog.dismiss());
-            modal.show();
-        });
+        if(!curClue.isAnswered()) {
+            holder.rightArrow.setOnClickListener(v -> {
+                AlertDialog.Builder modal = new AlertDialog.Builder(context, 0);
+                modal.setTitle("What is...?");
+                modal.setMessage(curClue.getAnswer());
+                modal.setPositiveButton("Correct", (dialog, which) -> {
+                    responseListener.correct(curClue);
+                    curClue.setAnswered(true);
+                    dialog.dismiss();
+                });
+                modal.setNegativeButton("Wrong", (dialog, which) -> {
+                    responseListener.incorrect(curClue);
+                    curClue.setAnswered(true);
+                    dialog.dismiss();
+                });
+                modal.show();
+            });
+        }
     }
 
     @Override

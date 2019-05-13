@@ -19,6 +19,7 @@ public class GameState {
     public GameState(List<Category> categories, List<Player> players) {
         this.categories = categories;
         this.players = players;
+        this.results = new HashMap<>();
     }
 
     public GameState(List<Category> categories, List<Player> players, HashMap<Integer, List<Clue>> categoryClueMap, HashMap<Player, List<ClueResult>> results) {
