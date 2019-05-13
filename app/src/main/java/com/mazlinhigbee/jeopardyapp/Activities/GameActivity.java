@@ -186,7 +186,7 @@ public class GameActivity extends AppCompatActivity implements ClueResponseListe
 
                     questionsRemaining--;
                     if (questionsRemaining == 0) {
-                        startActivity(new Intent());
+                        startActivity(new Intent(this,GameOverActivity.class));
                     }
                 }
             }

@@ -1,7 +1,8 @@
-package com.mazlinhigbee.jeopardyapp.Dao;
+package com.mazlinhigbee.jeopardyapp.Dao.Databases;
 
 import android.content.Context;
 
+import com.mazlinhigbee.jeopardyapp.Dao.PlayerDao;
 import com.mazlinhigbee.jeopardyapp.Models.Player;
 
 import androidx.room.Database;

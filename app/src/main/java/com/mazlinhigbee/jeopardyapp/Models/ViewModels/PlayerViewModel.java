@@ -2,7 +2,7 @@ package com.mazlinhigbee.jeopardyapp.Models.ViewModels;
 
 import android.app.Application;
 
-import com.mazlinhigbee.jeopardyapp.Dao.PlayerRepo;
+import com.mazlinhigbee.jeopardyapp.Dao.Repository.PlayerRepo;
 import com.mazlinhigbee.jeopardyapp.Models.Player;
 
 import java.util.List;

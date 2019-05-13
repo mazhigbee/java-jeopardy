@@ -26,6 +26,7 @@
         <activity android:name=".Activities.PlayerSetupActivity" />
         <activity android:name=".Activities.GameActivity" />
         <activity android:name=".Activities.GameOverActivity" />
+        <activity android:name=".Activities.HistoryActivity" />
     </application>
 
 </manifest>
